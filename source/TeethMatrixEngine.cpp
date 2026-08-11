@@ -12,6 +12,8 @@ constexpr float twoPi = 6.2831853071795864769f;
 }
 
 TeethMatrixEngine::TeethMatrixEngine()
+    : delayLeft (std::make_unique<DelayBuffer>()),
+      delayRight (std::make_unique<DelayBuffer>())
 {
     prepare (44100.0);
     reset();
@@ -25,8 +27,8 @@ void TeethMatrixEngine::prepare (double newSampleRate) noexcept
 
 void TeethMatrixEngine::reset() noexcept
 {
-    delayLeft.fill (0.0f);
-    delayRight.fill (0.0f);
+    delayLeft->fill (0.0f);
+    delayRight->fill (0.0f);
     writeIndex = 0;
     dampLeft = 0.0f;
     dampRight = 0.0f;
@@ -56,8 +58,8 @@ StereoFrame TeethMatrixEngine::processSample (float inputLeft, float inputRight)
         motionPhase -= 1.0f;
 
     const auto polarity = params.tune < 0.5f ? -1.0f : 1.0f;
-    const auto wetLeft = processSide (dryLeft, delayLeft, dampLeft, allpassLeft, polarity, 0.0f);
-    const auto wetRight = processSide (dryRight, delayRight, dampRight, allpassRight, -polarity, 0.37f);
+    const auto wetLeft = processSide (dryLeft, *delayLeft, dampLeft, allpassLeft, polarity, 0.0f);
+    const auto wetRight = processSide (dryRight, *delayRight, dampRight, allpassRight, -polarity, 0.37f);
     writeIndex = (writeIndex + 1) % maxDelaySamples;
 
     const auto dry = 1.0f - params.mix;
@@ -77,7 +79,7 @@ void TeethMatrixEngine::process (float* left, float* right, int numSamples) noex
     }
 }
 
-float TeethMatrixEngine::readDelay (const std::array<float, maxDelaySamples>& buffer, float delaySamples) const noexcept
+float TeethMatrixEngine::readDelay (const DelayBuffer& buffer, float delaySamples) const noexcept
 {
     const auto integral = static_cast<int> (delaySamples);
     const auto fraction = delaySamples - static_cast<float> (integral);
@@ -90,7 +92,7 @@ float TeethMatrixEngine::readDelay (const std::array<float, maxDelaySamples>& bu
 }
 
 float TeethMatrixEngine::processSide (float input,
-                                      std::array<float, maxDelaySamples>& buffer,
+                                      DelayBuffer& buffer,
                                       float& damped,
                                       float& allpassState,
                                       float polarity,

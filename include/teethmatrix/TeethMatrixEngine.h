@@ -3,6 +3,7 @@
 #include "teethmatrix/TeethMatrixDspPrimitives.h"
 
 #include <array>
+#include <memory>
 
 namespace teethmatrix
 {
@@ -31,6 +32,7 @@ public:
 
 private:
     static constexpr int maxDelaySamples = 65536;
+    using DelayBuffer = std::array<float, maxDelaySamples>;
 
     struct ClampedParameters
     {
@@ -43,9 +45,9 @@ private:
         float mix = 0.52f;
     };
 
-    [[nodiscard]] float readDelay (const std::array<float, maxDelaySamples>& buffer, float delaySamples) const noexcept;
+    [[nodiscard]] float readDelay (const DelayBuffer& buffer, float delaySamples) const noexcept;
     [[nodiscard]] float processSide (float input,
-                                     std::array<float, maxDelaySamples>& buffer,
+                                     DelayBuffer& buffer,
                                      float& damped,
                                      float& allpassState,
                                      float polarity,
@@ -55,8 +57,8 @@ private:
 
     ClampedParameters params;
     double sampleRate = 44100.0;
-    std::array<float, maxDelaySamples> delayLeft {};
-    std::array<float, maxDelaySamples> delayRight {};
+    std::unique_ptr<DelayBuffer> delayLeft;
+    std::unique_ptr<DelayBuffer> delayRight;
     int writeIndex = 0;
     float dampLeft = 0.0f;
     float dampRight = 0.0f;
