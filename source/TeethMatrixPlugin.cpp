@@ -237,7 +237,7 @@ yup::AudioProcessorEditor* TeethMatrixPlugin::createEditor()
     return new ParameterGridEditor (*this,
                                     "TeethMatrix",
                                     "Fractional feedback comb with standalone-only audition.",
-                                    0xffd8d8d8u);
+                                    0xfff2f2f0u);
 #endif
 }
 
