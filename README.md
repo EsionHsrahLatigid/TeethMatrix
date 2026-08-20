@@ -1,6 +1,5 @@
 # TeethMatrix
 
-TeethMatrix is a YUP stereo feedback-comb effect for Digital Harsh Noise. A fractional delay, signed regeneration, loop damping, allpass-like dispersion, shallow motion, and bounded drive turn ordinary input into moving metallic rows of spectral teeth. Hosted builds never generate sound from silence; Standalone adds an audition source and meters only at compile time.
 
 ## Identity and formats
 

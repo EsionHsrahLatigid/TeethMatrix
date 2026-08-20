@@ -4,7 +4,6 @@
 - Status: Active
 - Last refreshed: 2026-08-12
 - Primary product surfaces: YUP Standalone, VST3, AUv2 editor
-- Evidence reviewed: existing EHL YUP parameter-grid editors and the nine-effect Digital Harsh Noise UI survey
 
 ## Brand
 - Personality: hostile diagnostic terminal; precise rather than decorative.
@@ -18,7 +17,6 @@
 - Non-goals: conventional lush chorus, MIDI instrument behavior, photo-real hardware.
 
 ## Personas and jobs
-- Primary persona: Digital Harsh Noise performer or sound designer.
 - Job: reach unstable-sounding but repeatable comb textures quickly during automation.
 
 ## Information architecture
